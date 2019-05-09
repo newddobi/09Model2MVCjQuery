@@ -145,7 +145,7 @@ public class PurchaseController {
 		if(request.getParameter("pageCondition") != null && !request.getParameter("pageCondition").equals("")) {
 			pageSize = Integer.parseInt(request.getParameter("pageCondition"));
 		}else {
-			pageSize = 3;
+			pageSize = this.pageSize;
 		}
 		
 		search.setPageSize(pageSize);

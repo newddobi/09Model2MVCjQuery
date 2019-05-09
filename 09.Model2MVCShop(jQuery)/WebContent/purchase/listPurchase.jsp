@@ -6,21 +6,45 @@
 <title>구매 목록조회</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
-
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
+
 	function fncGetPurchaseList(currentPage) {
-		document.getElementById("currentPage").value = currentPage;
-		document.detailForm.submit();
+		
+		$("#currentPage").val(currentPage);
+		$("form").attr("method", "POST").attr("action", "/purchase/listPurchase").submit();
+		
 	}
-	function fncDeletePurchase(tranNo){
+	
+	function fncDeletePurchase(){
 		if(confirm("정말 취소하시겠습니까?") == true){
-			document.detailForm.action='/purchase/deletePurchase';
-			document.getElementById("tranNo").value = tranNo;
-			document.detailForm.submit();
+			
+		$("#tranNo").val($(this).parent().find('.tranNo').text().trim());
+		$("form").attr("method", "POST").attr("action", "/purchase/deletePurchase").submit();
+				
 		}else{
 			return;
 		}
 	}
+	
+	$(function(){
+		$("td.ct_btn01:contains('검색')").on("click", function(){
+			fncGetPurchaseList(1);
+		});
+		
+		$("td.deleteOrUpdate:contains('구매취소')").on("click", function(){
+			fncDeletePurchase();
+		});
+		
+		$("td.deleteOrUpdate:contains('물건도착')").on("click", function(){
+			self.location="/purchase/updateTranCode?prodNo=${purchase.purchaseProd.prodNo}&tranCode=${purchase.tranCode}"
+		});
+		
+		$(".ct_list_pop td:nth-child(11)" ).css("color" , "red");
+		
+		$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
+		
+	});
 	
 </script>
 </head>
@@ -29,8 +53,8 @@
 
 <div style="width: 98%; margin-left: 10px;">
 
-<form name="detailForm" action="/purchase/listPurchase" method="post">
-<input type="hidden" id="tranNo" name="tranNo" value="">
+<form name="detailForm">
+<input type="hidden" id="tranNo" name="tranNo" value=""/>
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -66,7 +90,7 @@
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:fncGetPurchaseList('1');">검색</a>
+						검색
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23">
@@ -101,6 +125,7 @@
 		<c:forEach var="purchase" items="${list}">
 			<c:set var="i" value="${i+1}" />
 			<tr class="ct_list_pop">
+			
 				<td align="center">
 					<a href="/purchase/getPurchase?tranNo=${purchase.tranNo}">${ i }</a>
 				</td>
@@ -127,16 +152,17 @@
 					</c:choose>
 				</td>
 				<td></td>
-				<td align="left">
+				<td align="left" class="deleteOrUpdate">
 					<c:choose>
 						<c:when test="${purchase.tranCode eq '3' }">
-							<a href="javascript:fncDeletePurchase(${purchase.tranNo});">구매취소</a>							
+							구매취소							
 						</c:when>
 						<c:when test="${purchase.tranCode eq '2'}">
-							<a href="/purchase/updateTranCode?prodNo=${purchase.purchaseProd.prodNo}&tranCode=${purchase.tranCode}">물건도착</a>
+							물건도착
 						</c:when>
 					</c:choose>
-				</td>
+				</td>				
+				<input type="hidden" class="tranNo" value="${purchase.tranNo}"/>
 			</tr>
 			<tr>
 				<td colspan="11" bgcolor="D6D7D6" height="1"></td>

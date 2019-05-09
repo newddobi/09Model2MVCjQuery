@@ -10,43 +10,43 @@
 
 <script type="text/javascript">
 
-function fncGetProductList(currentPage){
-	
-	$("#currentPage").val(currentPage);
-	$("form").attr("method", "POST").attr("action", "/product/listProduct?menu=${param.menu eq 'manage' ? 'manage':'search'}").submit();
-	
-};
+	function fncGetProductList(currentPage){
+		
+		$("#currentPage").val(currentPage);
+		$("form").attr("method", "POST").attr("action", "/product/listProduct?menu=${param.menu eq 'manage' ? 'manage':'search'}").submit();
+		
+	};
 
-window.$(function(){
+	window.$(function(){
+		
+		$("td.ct_btn01:contains('검색')").on("click", function(){
+			fncGetProductList(1);
+		});
+		
+		$("td.addZzim:contains('찜하기')").on("click", function(){
+			if(confirm("찜 목록에 담으시겠습니까?") == true){
+				
+				$("#prodNo").val($(this).parent().find('.prodNo').text().trim());
+				$("form").attr("method","POST").attr("action", "/product/addZzim?userId=${user.userId}").submit();
 	
-	$("td.ct_btn01:contains('검색')").on("click", function(){
-		fncGetProductList(1);
+			}else{
+				return;
+			};
+		});
+	
+		$(".ct_list_pop td:nth-child(5)").on("click", function(){
+			if(${param.menu eq 'manage'}){
+				self.location="/product/updateProductView?prodNo="+$(this).parent().find('.prodNo').text().trim()+"&menu=manage";	
+			}else{
+				self.location="/product/getProduct?prodNo="+$(this).parent().find('.prodNo').text().trim()+"&menu=search";
+			};
+		});
+		
+		$(".ct_list_pop td:nth-child(5)" ).css("color" , "brown");
+		
+		$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
+		
 	});
-	
-	$("td.addZzim:contains('찜하기')").on("click", function(){
-		if(confirm("찜 목록에 담으시겠습니까?") == true){
-			
-			$("#prodNo").val($(this).parent().find('.prodNo').text().trim());
-			$("form").attr("method","POST").attr("action", "/product/addZzim?userId=${user.userId}").submit();
-
-		}else{
-			return;
-		};
-	});
-	
-	$(".ct_list_pop td:nth-child(5)").on("click", function(){
-		if(${param.menu eq 'manage'}){
-			self.location="/product/updateProductView?prodNo="+$(this).parent().find('.prodNo').text().trim()+"&menu=manage";	
-		}else{
-			self.location="/product/getProduct?prodNo="+$(this).parent().find('.prodNo').text().trim()+"&menu=search";
-		};
-	});
-	
-	$(".ct_list_pop td:nth-child(5)" ).css("color" , "brown");
-	
-	$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
-	
-});
 
 </script>
 </head>
