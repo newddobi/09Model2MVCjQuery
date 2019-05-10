@@ -1,5 +1,7 @@
 package com.model2.mvc.web.product;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,11 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.model2.mvc.common.Page;
@@ -58,9 +61,33 @@ public class ProductController {
 		}
 		
 		@RequestMapping("addProduct")
-		public ModelAndView addProduct( @ModelAttribute("product") Product product ) throws Exception {
-
+		public ModelAndView addProduct( @ModelAttribute("product") Product product ,
+																		MultipartHttpServletRequest mtfRequest) throws Exception {
+			
 			System.out.println("addProduct");
+			
+			MultipartFile mf = mtfRequest.getFile("file");
+			System.out.println(mf);
+			
+			String path = "C:\\Users\\USER\\git\\09Model2MVCjQuery\\09.Model2MVCShop(jQuery)\\WebContent\\images\\uploadFiles\\";
+			
+			String originFileName = mf.getOriginalFilename();
+			long fileSize = mf.getSize();
+			
+			System.out.println("originFileName : "+originFileName);
+			System.out.println("fileSize : "+fileSize);
+			
+			String safeFile = path + System.currentTimeMillis() + originFileName; 
+			System.out.println("safeFile : "+safeFile);
+			product.setFileName(originFileName);
+			
+			try {
+			mf.transferTo(new File(safeFile));
+			}catch (IllegalStateException e) {
+				e.printStackTrace();
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 			productService.addProduct(product);
 			
@@ -110,10 +137,27 @@ public class ProductController {
 		}
 		
 		@RequestMapping("updateProduct")
-		public ModelAndView updateProduct( @ModelAttribute("product") Product product) throws Exception{
+		public ModelAndView updateProduct( @ModelAttribute("product") Product product,
+																			MultipartHttpServletRequest mtfRequest) throws Exception{
 
 			System.out.println("updateProduct");
 
+			MultipartFile  mf = mtfRequest.getFile("file");
+			
+			String path = "C:\\Users\\USER\\git\\09Model2MVCjQuery\\09.Model2MVCShop(jQuery)\\WebContent\\images\\uploadFiles\\";
+			
+			String originFileName = mf.getOriginalFilename();
+			long fileSize = mf.getSize();
+			
+			System.out.println("originFileName : "+originFileName);
+			System.out.println("fileSize : "+fileSize);
+			
+			String safeFile = path + System.currentTimeMillis() + originFileName;
+			
+			System.out.println("safeFile : "+safeFile);
+			product.setFileName(originFileName);
+			
+			
 			productService.updateProduct(product);
 			
 			ModelAndView modelAndView = new ModelAndView();
@@ -150,7 +194,7 @@ public class ProductController {
 			map.put("search", search);
 			map.put("userId", userId);
 			
-			map=productService.getProductList(search);
+			map = productService.getZzimList(map);
 			
 			Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 			

@@ -22,23 +22,23 @@ function fncAddPurchase() {
 	if(tranAmount == null || tranAmount.length<1 || tranAmount > ${product.amount} ){
 		alert("수량은 반드시 입력하고 재고 수보다 많으면 안됩니다.");
 		return;
-	}
+	};
 	if(receiverName == null || receiverName.length<1){
 		alert("이름은 반드시 입력하여야 합니다.");
 		return;
-	}
+	};
 	if(receiverPhone == null || receiverPhone.length<1){
 		alert("전화번호는 반드시 입력하여야 합니다.");
 		return;
-	}
+	};
 	if(divyAddr == null || divyAddr.length<1){
 		alert("주소는 반드시 입력하여야 합니다.");
 		return;
-	}
+	};
 
 	$("form").attr("method", "POST").attr("action", "/purchase/addPurchase").submit();
 	
-}
+};
 
 $(function(){
 	
@@ -48,6 +48,9 @@ $(function(){
 	$("td.ct_btn01:contains('취소')").on("click", function(){
 		history.go(-1);
 	});
+	$("#calander").on('click', function(){
+		show_calendar('document.detailForm.divyDate', document.detailForm.divyDate.value)
+	});
 });
 
 </script>
@@ -55,7 +58,7 @@ $(function(){
 
 <body>
 
-<form name="addPurchase">
+<form name="detailForm">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -232,8 +235,7 @@ $(function(){
 		<td width="200" class="ct_write01">
 			<input 	type="text" readonly="readonly" name="divyDate" class="ct_input_g" 
 							style="width: 100px; height: 19px" maxLength="20"/>
-			<img 	src="../images/ct_icon_date.gif" width="15" height="15"	
-						onclick="show_calendar('document.addPurchase.divyDate', document.addPurchase.divyDate.value)"/>
+			<img 	src="../images/ct_icon_date.gif" width="15" height="15"	id="calander"/>
 		</td>
 	</tr>
 	<tr>

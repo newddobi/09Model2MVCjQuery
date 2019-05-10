@@ -10,36 +10,22 @@
 
 <script type="text/javascript">
 
-	function fncGetProductList(currentPage){
+	function fncGetZzimList(currentPage){
 		
 		$("#currentPage").val(currentPage);
-		$("form").attr("method", "POST").attr("action", "/product/listProduct?menu=${param.menu eq 'manage' ? 'manage':'search'}").submit();
+		$("form").attr("method", "POST").attr("action", "/product/listZzim").submit();
 		
 	};
 
 	window.$(function(){
 		
 		$("td.ct_btn01:contains('검색')").on("click", function(){
-			fncGetProductList(1);
+			fncGetZzimList(1);
 		});
 		
-		$("td.addZzim:contains('찜하기')").on("click", function(){
-			if(confirm("찜 목록에 담으시겠습니까?") == true){
-				
-				$("#prodNo").val($(this).parent().find('.prodNo').text().trim());
-				$("form").attr("method","POST").attr("action", "/product/addZzim?userId=${user.userId}").submit();
-	
-			}else{
-				return;
-			};
-		});
-	
 		$(".ct_list_pop td:nth-child(5)").on("click", function(){
-			if(${param.menu eq 'manage'}){
-				self.location="/product/updateProductView?prodNo="+$(this).parent().find('.prodNo').text().trim()+"&menu=manage";	
-			}else{
-				self.location="/product/getProduct?prodNo="+$(this).parent().find('.prodNo').text().trim()+"&menu=search";
-			};
+			self.location="/product/getProduct?prodNo="+$(this).parent().find('.prodNo').text().trim()+"&menu=search";
+		
 		});
 		
 		$(".ct_list_pop td:nth-child(5)" ).css("color" , "royalblue");
@@ -65,16 +51,7 @@
 		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td width="93%" class="ct_ttl01">
-					<c:choose>
-						<c:when test="${param.menu eq 'manage'}">
-							상품 관리
-						</c:when>
-						<c:when test="${param.menu eq 'search'}">
-							상품목록 조회
-						</c:when>
-					</c:choose>
-					</td>
+					<td width="93%" class="ct_ttl01">찜 목록</td>
 				</tr>
 			</table>
 		</td>
@@ -83,8 +60,6 @@
 		</td>
 	</tr>
 </table>
-
-
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
 		<td>
@@ -99,26 +74,6 @@
 				<option value="10" ${ ! empty search.pageSize && search.pageSize==10 ? "selected" : "" }>10</option>
 			</select>
 		</td>
-		<td align="right">
-			<select name="orderCondition" class="ct_input_g" style="width:80px">
-				<option value="" ${ ! empty search.orderCondition && search.orderCondition.equals("") ? "selected" : "" }>선택없음</option>
-				<option value="1" ${ ! empty search.orderCondition && search.orderCondition==1 ? "selected" : "" }>최근상품</option>
-				<option value="2" ${ ! empty search.orderCondition && search.orderCondition==2 ? "selected" : "" }>가격낮은순</option>
-				<option value="3" ${ ! empty search.orderCondition && search.orderCondition==3 ? "selected" : "" }>가격높은순</option>
-				<option value="4" ${ ! empty search.orderCondition && search.orderCondition==4 ? "selected" : "" }>조회수순</option>
-			</select>
-			<select name="searchCondition" class="ct_input_g" style="width:80px">
-				<option value="0" ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>상품번호</option>
-				<option value="1" ${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>상품명</option>
-				<option value="2" ${ ! empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>상품가격</option>
-				<c:if test="${user.userId eq 'admin' && param.menu eq 'manage'}">
-					<option value="3" ${ ! empty search.searchCondition && search.searchCondition==3 ? "selected" : "" }>배송중</option>
-					<option value="4" ${ ! empty search.searchCondition && search.searchCondition==4 ? "selected" : "" }>배송완료</option>
-					<option value="5" ${ ! empty search.searchCondition && search.searchCondition==5 ? "selected" : "" }>구매완료</option>
-				</c:if>
-			</select>
-			<input type="text" name="searchKeyword" value="${! empty search.searchCondition ? search.searchKeyword : "" }" class="ct_input_g" style="width:200px; height:19px" />
-		</td>	
 		<td align="right" width="70">
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
@@ -138,16 +93,6 @@
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
-		<td align="right">
-			가격대로 찾기
-			<input type="text" name="searchMin" value="${! empty search.searchMin ? search.searchMin : "" }" class="ct_input_g" style="width:70px; height:19px" />
-			-
-			<input type="text" name="searchMax" value="${! empty search.searchMax ? search.searchMax : "" }" class="ct_input_g" style="width:70px; height:19px" />
-		</td>
-	</tr>
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
 		<td colspan="11" >전체 ${resultPage.totalCount } 건수, 현재  ${resultPage.currentPage } 페이지</td>
 	</tr>
 	<tr>
@@ -157,13 +102,7 @@
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="200">
 			상품명<br>
-			<c:if test="${user.userId != 'admin'}">
-				<h7>(상품명 click:상세정보)</h7>
-			</c:if>
-			<c:if test="${user.userId == 'admin'}">
-				<h7>(상품명 click:상품수정)</h7>
-			</c:if>
-			
+			<h7>(상품명 click:상세정보)</h7>
 		</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">가격</td>
@@ -193,10 +132,7 @@
 				<c:choose>
 					<c:when test="${product.amount != 0}">
 						판매중&nbsp;
-							<c:if test="${user.userId != 'admin' }">
-								찜하기
-							</c:if>
-						</c:when>
+					</c:when>
 					<c:otherwise>
 						재고없음
 					</c:otherwise>	
@@ -214,7 +150,7 @@
 		<td align="center">
 			<input type="hidden" id="currentPage" name="currentPage" value=""/>
 			<jsp:include page="../common/pageNavigator.jsp">
-				<jsp:param name="what" value="Product"/>
+				<jsp:param name="what" value="Zzim"/>
 			</jsp:include>	
 			
     	</td>

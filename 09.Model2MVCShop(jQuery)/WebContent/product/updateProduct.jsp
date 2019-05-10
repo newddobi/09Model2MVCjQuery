@@ -49,6 +49,9 @@ $(document).ready(function(){
 	$("td.ct_btn01:contains('취소')").on("click", function(){
 		$("form")[0].reset();
 	});
+	$("#calander").on('click', function(){
+		show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value)
+	})
 });
 
 </script>
@@ -56,7 +59,7 @@ $(document).ready(function(){
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm">
+<form name="detailForm" enctype="multipart/form-data">
 <input type="hidden" name="prodNo" value="${product.prodNo}" />
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -124,8 +127,7 @@ $(document).ready(function(){
 			<input type="text" name="manuDate" readonly="readonly" class="ct_input_g"  
 						style="width: 100px; height: 19px"	maxLength="10" minLength="6"
 							value="${product.manuDate}"/>
-				&nbsp;<img src="../images/ct_icon_date.gif" width="15" height="15" 
-										onclick="show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value)"/>
+				&nbsp;<img src="../images/ct_icon_date.gif" width="15" height="15" id=calander/>
 		</td>
 	</tr>
 	<tr>
@@ -163,7 +165,7 @@ $(document).ready(function(){
 		<td width="104" class="ct_write">상품이미지</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input		type="text" name="fileName" class="ct_input_g" 
+			<input		type="file" name="file" class="ct_input_g" 
 							style="width: 200px; height: 19px" maxLength="13"/>
 		</td>
 	</tr>

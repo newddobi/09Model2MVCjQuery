@@ -101,7 +101,7 @@
 														ORDER BY pro.view_count DESC
 													</when>
 												</choose>
-											</if> ) inner_table
+											</if> )inner_table
 						WHERE ROWNUM &lt;= #{endRowNum} )
 		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
 	</select>
@@ -179,6 +179,22 @@
 		VALUES(seq_zzim_zzim_no.NEXTVAL, #{userId}, #{product.prodNo}, #{product.prodName}, #{product.prodDetail}, #{product.manuDate}, 
 				#{product.price}, #{product.fileName}, #{product.viewCount}, #{product.amount}, #{product.regDate})
 	</insert>
+	
+	<select id="getZzimList" parameterType="map" resultMap="productSelectMap">
+		SELECT * FROM(SELECT inner_table.* , ROWNUM AS row_seq
+	    			  FROM(SELECT zzim_no, user_id, prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date, amount
+		  				   FROM zzim
+		  				   WHERE user_id = #{userId})inner_table
+					  WHERE ROWNUM &lt;= #{search.endRowNum} )
+		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
+	</select>
+	
+	<select id="getTotalCount2" parameterType="search" resultType="int">
+		SELECT COUNT(*)
+          			FROM (SELECT zzim_no, user_id, prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date, amount
+  	        			  FROM zzim) countTable
+	</select>
+	
 	
 	<update id="minusAmount" parameterType="product">
 		UPDATE product

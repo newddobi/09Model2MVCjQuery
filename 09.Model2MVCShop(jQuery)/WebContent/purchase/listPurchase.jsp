@@ -16,34 +16,49 @@
 		
 	}
 	
-	function fncDeletePurchase(){
-		if(confirm("정말 취소하시겠습니까?") == true){
-			
-		$("#tranNo").val($(this).parent().find('.tranNo').text().trim());
-		$("form").attr("method", "POST").attr("action", "/purchase/deletePurchase").submit();
-				
-		}else{
-			return;
-		}
-	}
-	
 	$(function(){
 		$("td.ct_btn01:contains('검색')").on("click", function(){
 			fncGetPurchaseList(1);
 		});
 		
 		$("td.deleteOrUpdate:contains('구매취소')").on("click", function(){
-			fncDeletePurchase();
+		
+			if(confirm("정말 취소하시겠습니까?") == true){
+				
+				console.log($(this).parent().find('.tranNo').text().trim());
+				
+				$("#tranNo").val($(this).parent().find('.tranNo').text().trim());
+				
+				$("form").attr("method", "POST").attr("action", "/purchase/deletePurchase").submit();
+						
+				}else{
+					return;
+				}
 		});
 		
 		$("td.deleteOrUpdate:contains('물건도착')").on("click", function(){
 			self.location="/purchase/updateTranCode?prodNo=${purchase.purchaseProd.prodNo}&tranCode=${purchase.tranCode}"
 		});
 		
-		$(".ct_list_pop td:nth-child(11)" ).css("color" , "red");
+		$(".ct_list_pop td:nth-child(1)").on("click", function(){
+			console.log(self.location="/purchase/getPurchase?tranNo="+$(this).parent().find('.tranNo').text().trim());
+			self.location="/purchase/getPurchase?tranNo="+$(this).parent().find('.tranNo').text().trim();
+			
+		});
 		
+		$(".ct_list_pop td:nth-child(5)").on("click", function(){
+			self.location="/user/getUser?userId="+$(this).text().trim();
+		});
+		
+		
+		$(".ct_list_pop td:nth-child(1)" ).css("color" , "#0064FF");
+		$(".ct_list_pop td:nth-child(3)" ).css("color" , "#3296FF");
+		$(".ct_list_pop td:nth-child(5)" ).css("color" , "#50B4FF");
+		
+		
+		$(".ct_list_pop td:nth-child(13)" ).css("color" , "red");
 		$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
-		
+		$("h7").css("color" , "red");
 	});
 	
 </script>
@@ -105,9 +120,17 @@
 		<td colspan="11">전체 ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage} 페이지</td>
 	</tr>
 	<tr>
-		<td class="ct_list_b" width="100">No</td>
+		<td class="ct_list_b" width="150">
+			No<br>
+			<h7>(No click:구매조회)</h7>
+		</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">회원ID</td>
+		<td class="ct_list_b" width="100">거래번호</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b" width="150">
+			회원ID<br>
+			<h7>(회원ID click:회원정보)</h7>
+		</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">회원명</td>
 		<td class="ct_line02"></td>
@@ -116,9 +139,10 @@
 		<td class="ct_list_b">배송현황</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">정보수정</td>
+		<td class="ct_line02"></td>
 	</tr>
 	<tr>
-		<td colspan="11" bgcolor="808285" height="1"></td>
+		<td colspan="13" bgcolor="808285" height="1"></td>
 	</tr>
 
 	<c:set var="i" value="0"/>
@@ -127,18 +151,22 @@
 			<tr class="ct_list_pop">
 			
 				<td align="center">
-					<a href="/purchase/getPurchase?tranNo=${purchase.tranNo}">${ i }</a>
-				</td>
-				<td></td>			
-				<td align="left">
-					<a href="/user/getUser?userId=${purchase.buyer.userId}">${purchase.buyer.userId}</a>
+					${ i }
 				</td>
 				<td></td>
-				<td align="left">${purchase.receiverName}</td>
+				<td align="center" class="tranNo">
+					${purchase.tranNo }
+				</td>
 				<td></td>
-				<td align="left">${purchase.purchaseProd.prodName}</td>
+				<td align="center">
+					${purchase.buyer.userId}
+				</td>
 				<td></td>
-				<td align="left">
+				<td align="center">${purchase.receiverName}</td>
+				<td></td>
+				<td align="center">${purchase.purchaseProd.prodName}</td>
+				<td></td>
+				<td align="center">
 					<c:choose>
 						<c:when test="${purchase.tranCode eq '3' }">
 							현재 구매완료 상태입니다.
@@ -152,7 +180,7 @@
 					</c:choose>
 				</td>
 				<td></td>
-				<td align="left" class="deleteOrUpdate">
+				<td align="center" class="deleteOrUpdate">
 					<c:choose>
 						<c:when test="${purchase.tranCode eq '3' }">
 							구매취소							
@@ -161,14 +189,15 @@
 							물건도착
 						</c:when>
 					</c:choose>
-				</td>				
-				<input type="hidden" class="tranNo" value="${purchase.tranNo}"/>
+				</td>
+
 			</tr>
 			<tr>
-				<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+				<td colspan="13" bgcolor="D6D7D6" height="1"></td>
 			</tr>	
 		</c:forEach>
 </table>
+
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
 	<tr>

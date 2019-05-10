@@ -168,11 +168,13 @@
 					최근 본 상품
 				</td>
 			</tr>
+			<c:if test="${ !empty user && user.role == 'user'}">
 			<tr>
 				<td class="Depth03">
 					찜 목록보기
 				</td>
 			</tr>
+			</c:if>
 		</table>
 	</td>
 </tr>
