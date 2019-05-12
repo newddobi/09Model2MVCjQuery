@@ -84,4 +84,16 @@ public class ProductDaoImpl implements ProductDao{
 	public void addReview(Review review) throws Exception {
 		sqlSession.insert("ReviewMapper.addReview", review);
 	}
+
+	@Override
+	public List<Product> getReviewList(Map map) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getTotalCount3(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

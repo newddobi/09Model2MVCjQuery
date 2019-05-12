@@ -87,4 +87,9 @@ public class ProductServiceImpl implements ProductService{
 		productDao.addReview(review);
 	}
 
+	@Override
+	public Map<String, Object> getReviewList(Map<String, Object> map) throws Exception {
+		return null;
+	}
+
 }

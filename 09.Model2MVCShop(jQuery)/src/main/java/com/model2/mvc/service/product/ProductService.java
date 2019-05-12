@@ -26,4 +26,6 @@ public interface ProductService {
 
 	public Map<String, Object> getProductList(Search search) throws Exception;
 	
+	public Map<String, Object> getReviewList(Map<String, Object> map) throws Exception;	
+	
 }

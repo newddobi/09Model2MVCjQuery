@@ -161,7 +161,7 @@
 		SELECT * FROM(SELECT inner_table.* , ROWNUM AS row_seq
 	    			  FROM(SELECT zzim_no, user_id, prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date, amount
 		  				   FROM zzim
-		  				   WHERE user_id = #{userId})inner_table
+		  				   WHERE user_id = #{userId} )inner_table
 					  WHERE ROWNUM &lt;= #{search.endRowNum} )
 		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
 	</select>

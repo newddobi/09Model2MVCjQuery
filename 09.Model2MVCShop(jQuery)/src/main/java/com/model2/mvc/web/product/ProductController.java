@@ -123,7 +123,7 @@ public class ProductController {
 			return modelAndView;
 		}
 		
-		@RequestMapping("/updateProductView")
+		@RequestMapping("updateProductView")
 		public ModelAndView updateProductView( @RequestParam("prodNo") int prodNo ) throws Exception{
 
 			System.out.println("updateProductView");
@@ -169,7 +169,7 @@ public class ProductController {
 		
 		@RequestMapping("listZzim")
 		public ModelAndView listZzim(@ModelAttribute("search") Search search, 
-																	HttpServletRequest request, HttpSession session) throws Exception{
+														HttpServletRequest request, HttpSession session) throws Exception{
 			
 			System.out.println("listZzim");
 			
@@ -183,8 +183,6 @@ public class ProductController {
 			}
 			if(request.getParameter("pageCondition") != null && !request.getParameter("pageCondition").equals("")) {
 				pageSize = Integer.parseInt(request.getParameter("pageCondition"));
-			}else {
-				pageSize = 8;
 			}
 			
 			search.setPageSize(pageSize);
@@ -227,8 +225,6 @@ public class ProductController {
 			
 			if(request.getParameter("pageCondition") != null && !request.getParameter("pageCondition").equals("")) {
 				pageSize = Integer.parseInt(request.getParameter("pageCondition"));
-			}else {
-				pageSize = this.pageSize;
 			}
 			
 			search.setPageSize(pageSize);
@@ -297,7 +293,49 @@ public class ProductController {
 			modelAndView.setViewName("forward:/review/getReview.jsp");
 			return modelAndView;
 		}
+		
+		@RequestMapping("listReview")
+		public ModelAndView listReview(@ModelAttribute("search") Search search,
+										@RequestParam("prodNo")int prodNo,
+										HttpServletRequest request,
+										HttpSession session) throws Exception{
 
+			System.out.println("listReview");
+		
+			if(search.getCurrentPage() ==0){
+				search.setCurrentPage(1);
+			}//언제 currenctPage가 0일까?
+			
+			if(request.getParameter("currentPage") != null && !request.getParameter("currentPage").equals("")) {
+				System.out.println("들어온 currentPage 값 :: "+request.getParameter("currentPage"));
+				search.setCurrentPage(Integer.parseInt(request.getParameter("currentPage")));
+			}
+			if(request.getParameter("pageCondition") != null && !request.getParameter("pageCondition").equals("")) {
+				pageSize = Integer.parseInt(request.getParameter("pageCondition"));
+			}
+			
+			search.setPageSize(pageSize);
+			
+			String role = ((User)session.getAttribute("user")).getRole();
+			
+			Map<String, Object> map = new HashMap();
+			map.put("search", search);
+			map.put("prodNo", prodNo);
+			map.put("role", role);
+			
+			Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+			
+			System.out.println(resultPage);
+			
+			ModelAndView modelAndView = new ModelAndView();
+			modelAndView.setViewName("forward:/product/listZzim.jsp");
+			modelAndView.addObject("list", map.get("list"));
+			modelAndView.addObject("resultPage", resultPage);
+			modelAndView.addObject("search", search);
+			
+			return modelAndView;
+			
+		}
 		
 
 }//end of class

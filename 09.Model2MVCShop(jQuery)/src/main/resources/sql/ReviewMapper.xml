@@ -22,4 +22,33 @@
 		VALUES(seq_review_review_no.NEXTVAL, #{prodNo}, #{userId}, #{title}, #{content}, SYSDATE)
 	</insert>
  
+ 	<select id="getReviewList" parameterType="map" resultMap="reviewSelectMap">
+		SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  			FROM ( SELECT r.review_no, r.prod_no, p.prod_name, r.user_id, r.title, r.content, r.reg_date
+					   FROM review r, product p
+					   <where>
+					   		<if test="true">
+					   			r.prod_no = p.prod_no		
+					   		</if>
+					   		<if test="role == user">
+					   			AND prod_no = #{prodNo}
+					   		</if>
+					   </where>
+					   ORDER BY reg_date DESC ) inner_table
+				WHERE ROWNUM &lt;= #{search.endRowNum} )
+		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
+	</select>
+	
+	<select id="getTotalCount" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM (	SELECT t.tran_no, t.prod_no, p.prod_name, t.buyer_id, t.payment_option, t.tran_status_code, t.order_date, t.tran_amount
+				FROM transaction t, product p
+				<where>
+					t.prod_no = p.prod_no
+					<if test="_parameter != 'admin'">
+						AND buyer_id = #{something}
+					</if>  										
+				</where>) countTalble
+	</select>
 </mapper>

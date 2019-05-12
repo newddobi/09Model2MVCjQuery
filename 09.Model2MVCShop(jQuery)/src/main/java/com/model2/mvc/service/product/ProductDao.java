@@ -27,6 +27,10 @@ public interface ProductDao {
 	
 	public List<Product> getZzimList(Map map) throws Exception;
 	
+	public List<Product> getReviewList(Map map) throws Exception;
+	
+	public int getTotalCount3(Search search) throws Exception;
+	
 	public int getTotalCount2(Search search) throws Exception;
 	
 	public int getTotalCount(Search search) throws Exception;
