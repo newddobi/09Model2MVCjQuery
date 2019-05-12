@@ -179,7 +179,7 @@ public class PurchaseController {
 	
 	@RequestMapping("updateTranCode")
 	public String updateTranCoed(@RequestParam("prodNo") int prodNo,
-															@RequestParam("tranCode") String tranCode) throws Exception{
+									@RequestParam("tranCode") String tranCode) throws Exception{
 		
 		System.out.println("updateTranCode");
 		

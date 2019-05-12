@@ -14,8 +14,6 @@ public class Product {
 	private Date regDate;
 	private String proTranCode;
 	private int viewCount;
-	private int cart;
-	
 	private int amount;
 	
 	public Product(){
@@ -77,15 +75,6 @@ public class Product {
 	public void setViewCount(int viewCount) {
 		this.viewCount = viewCount;
 	}
-
-	public int getCart() {
-		return cart;
-	}
-
-	public void setCart(int cart) {
-		this.cart = cart;
-	}
-
 	
 	public int getAmount() {
 		return amount;
@@ -99,9 +88,7 @@ public class Product {
 	public String toString() {
 		return "Product [fileName=" + fileName + ", manuDate=" + manuDate + ", price=" + price + ", prodDetail="
 				+ prodDetail + ", prodName=" + prodName + ", prodNo=" + prodNo + ", regDate=" + regDate
-				+ ", proTranCode=" + proTranCode + ", viewCount=" + viewCount + ", cart=" + cart + ", amount=" + amount
-				+ "]";
+				+ ", proTranCode=" + proTranCode + ", viewCount=" + viewCount + ", amount=" + amount + "]";
 	}
-
 
 }// end of class

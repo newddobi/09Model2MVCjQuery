@@ -58,6 +58,11 @@
 		 		$(window.parent.frames["rightFrame"].document.location).attr("href","/product/listProduct?menu=search");
 			});
 			
+			$( ".Depth03:contains('구 매 관 리')" ).on("click" , function() {
+				
+		 		$(window.parent.frames["rightFrame"].document.location).attr("href","/purchase/listPurchase");
+			});
+			
 			$( ".Depth03:contains('구매이력조회')" ).on("click" , function() {
 				
 		 		$(window.parent.frames["rightFrame"].document.location).attr("href","/purchase/listPurchase");
@@ -74,7 +79,6 @@
 		 		$(window.parent.frames["rightFrame"].document.location).attr("href","/product/listZzim");
 			});
 						
-			
 		});	
 		 
 	</script>
@@ -100,7 +104,6 @@
 						</td>
 					</tr>
 				</c:if>
-			
 				<c:if test="${user.role == 'admin'}">
 					<tr>
 						<td class="Depth03" >
@@ -111,7 +114,6 @@
 						</td>
 					</tr>
 				</c:if>
-			
 				<tr>
 					<td class="DepthEnd">&nbsp;</td>
 				</tr>
@@ -151,7 +153,13 @@
 					상 품 검 색
 				</td>
 			</tr>
-			
+			<c:if test="${user.role == 'admin' }">
+			<tr>
+				<td class="Depth03">
+					구 매 관 리
+				</td>
+			</tr>
+			</c:if>
 			<c:if test="${ !empty user && user.role == 'user'}">
 			<tr>
 				<td class="Depth03">

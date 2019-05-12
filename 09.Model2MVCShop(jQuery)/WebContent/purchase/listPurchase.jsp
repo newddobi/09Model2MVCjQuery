@@ -13,8 +13,7 @@
 		
 		$("#currentPage").val(currentPage);
 		$("form").attr("method", "POST").attr("action", "/purchase/listPurchase").submit();
-		
-	}
+	};
 	
 	$(function(){
 		$("td.ct_btn01:contains('검색')").on("click", function(){
@@ -24,39 +23,58 @@
 		$("td.deleteOrUpdate:contains('구매취소')").on("click", function(){
 		
 			if(confirm("정말 취소하시겠습니까?") == true){
-				
-				console.log($(this).parent().find('.tranNo').text().trim());
-				
-				$("#tranNo").val($(this).parent().find('.tranNo').text().trim());
-				
-				$("form").attr("method", "POST").attr("action", "/purchase/deletePurchase").submit();
-						
-				}else{
-					return;
-				}
+				self.location="/purchase/deletePurchase?tranNo="+$(this).parent().find('.tranNo').text().trim();
+			}else{
+				return;
+			};
 		});
 		
-		$("td.deleteOrUpdate:contains('물건도착')").on("click", function(){
-			self.location="/purchase/updateTranCode?prodNo=${purchase.purchaseProd.prodNo}&tranCode=${purchase.tranCode}"
+		$("td.deleteOrUpdate:contains('배송시작')").on("click", function(){
+			
+			if(confirm("배송을 시작하시겠습니까?") == true){
+				console.log(self.location="/purchase/updateTranCode?prodNo="+$(this).parent().find('.prodNo').text().trim()+
+						"&tranCode="+$(this).find('.tranCode').val());
+				self.location="/purchase/updateTranCode?prodNo="+$(this).parent().find('.prodNo').text().trim()+
+						"&tranCode="+$(this).find('.tranCode').val();
+			}else{
+				return;
+			}
 		});
+		
+		$("td.deleteOrUpdate:contains('구매결정')").on("click", function(){
+			
+			if(confirm("구매를 완료하시겠습니까?") == true){
+				self.location="/purchase/updateTranCode?prodNo="+$(this).parent().find('.prodNo').text().trim()+
+						"&tranCode="+$(this).find('.tranCode').val();
+			}else{
+				return;
+			}
+		});
+		
+		$("td.deleteOrUpdate:contains('후기등록')").on("click", function(){
+			
+			if(confirm("후기를 등록하시겠습니까?") == true){
+				self.location="/product/addReviewView?prodNo="+$(this).parent().find('.prodNo').text().trim()+
+						"&userId="+$(this).parent().find('.userId').text().trim();
+			}else{
+				return;
+			}
+		});
+		
 		
 		$(".ct_list_pop td:nth-child(1)").on("click", function(){
-			console.log(self.location="/purchase/getPurchase?tranNo="+$(this).parent().find('.tranNo').text().trim());
 			self.location="/purchase/getPurchase?tranNo="+$(this).parent().find('.tranNo').text().trim();
-			
 		});
 		
-		$(".ct_list_pop td:nth-child(5)").on("click", function(){
+		$(".ct_list_pop td:nth-child(9)").on("click", function(){
 			self.location="/user/getUser?userId="+$(this).text().trim();
 		});
 		
 		
 		$(".ct_list_pop td:nth-child(1)" ).css("color" , "#0064FF");
-		$(".ct_list_pop td:nth-child(3)" ).css("color" , "#3296FF");
-		$(".ct_list_pop td:nth-child(5)" ).css("color" , "#50B4FF");
+		$(".ct_list_pop td:nth-child(9)" ).css("color" , "green");
 		
-		
-		$(".ct_list_pop td:nth-child(13)" ).css("color" , "red");
+		$(".ct_list_pop td:nth-child(19)" ).css("color" , "red");
 		$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
 		$("h7").css("color" , "red");
 	});
@@ -69,15 +87,20 @@
 <div style="width: 98%; margin-left: 10px;">
 
 <form name="detailForm">
-<input type="hidden" id="tranNo" name="tranNo" value=""/>
-
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
 		<td width="15" height="37"><img src="/images/ct_ttl_img01.gif"width="15" height="37"></td>
 		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td width="93%" class="ct_ttl01">구매 목록조회</td>
+					<c:choose>
+						<c:when test="${user.role == 'admin'}">
+							<td width="93%" class="ct_ttl01">구 매 관 리</td>
+						</c:when>
+						<c:when test="${user.role != 'admin'}">
+							<td width="93%" class="ct_ttl01">구매 목록조회</td>
+						</c:when>
+					</c:choose>
 				</tr>
 			</table>
 		</td>
@@ -117,39 +140,43 @@
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
 	<tr>
-		<td colspan="11">전체 ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage} 페이지</td>
+		<td colspan="19">전체 ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage} 페이지</td>
 	</tr>
 	<tr>
-		<td class="ct_list_b" width="150">
+		<td class="ct_list_b" width="120">
 			No<br>
 			<h7>(No click:구매조회)</h7>
 		</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="100">거래번호</td>
+		<td class="ct_list_b">주문번호</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b">상품번호</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b">상품명</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">
 			회원ID<br>
 			<h7>(회원ID click:회원정보)</h7>
 		</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">회원명</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">상품명</td>
+		<td class="ct_list_b" width="150">결제방법</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">배송현황</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b">주문일시</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b">수량</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">정보수정</td>
 		<td class="ct_line02"></td>
 	</tr>
 	<tr>
-		<td colspan="13" bgcolor="808285" height="1"></td>
+		<td colspan="19" bgcolor="808285" height="1"></td>
 	</tr>
-
 	<c:set var="i" value="0"/>
 		<c:forEach var="purchase" items="${list}">
 			<c:set var="i" value="${i+1}" />
 			<tr class="ct_list_pop">
-			
 				<td align="center">
 					${ i }
 				</td>
@@ -158,13 +185,29 @@
 					${purchase.tranNo }
 				</td>
 				<td></td>
+				<td align="center" class="prodNo">
+					${purchase.purchaseProd.prodNo}
+				</td>
+				<td></td>
 				<td align="center">
+					${purchase.purchaseProd.prodName}
+				</td>
+				<td></td>
+				<td align="center" class="userId">
 					${purchase.buyer.userId}
 				</td>
 				<td></td>
-				<td align="center">${purchase.receiverName}</td>
-				<td></td>
-				<td align="center">${purchase.purchaseProd.prodName}</td>
+				<td align="center">
+					<c:choose>
+						<c:when test="${purchase.paymentOption eq '1'}">
+							현금구매
+						</c:when>
+						<c:when test="${purchase.paymentOption eq '2'}">
+							신용구매
+						</c:when>
+						
+					</c:choose>
+				</td>
 				<td></td>
 				<td align="center">
 					<c:choose>
@@ -175,30 +218,60 @@
 							현재 배송중 입니다.
 						</c:when>
 						<c:when test="${purchase.tranCode eq '1' }">
-							현재 배송완료 상태입니다.
+							거래가 완료되었습니다.
 						</c:when>
 					</c:choose>
 				</td>
 				<td></td>
+				<td align="center">
+					${purchase.orderDate}
+				</td>
+				<td></td>
+				<td align="center">
+					${purchase.tranAmount}
+				</td>
+				<td></td>
 				<td align="center" class="deleteOrUpdate">
+					<input type="hidden" class="tranCode" name="tranCode" value="${purchase.tranCode}"/>
 					<c:choose>
 						<c:when test="${purchase.tranCode eq '3' }">
-							구매취소							
+							<c:choose>
+								<c:when test="${user.role == 'admin'}">
+									배송하기
+								</c:when>
+								<c:when test="${user.role != 'admin'}">
+									구매취소
+								</c:when>
+							</c:choose>				
 						</c:when>
 						<c:when test="${purchase.tranCode eq '2'}">
-							물건도착
+							<c:choose>
+								<c:when test="${user.role == 'admin'}">
+									배송시작
+								</c:when>
+								<c:when test="${user.role != 'admin'}">
+									구매결정
+								</c:when>
+							</c:choose>
+						</c:when>
+						<c:when test="${purchase.tranCode eq '1'}">
+							<c:choose>
+								<c:when test="${user.role == 'admin'}">
+									거래완료
+								</c:when>
+								<c:when test="${user.role != 'admin'}">
+									후기등록
+								</c:when>
+							</c:choose>
 						</c:when>
 					</c:choose>
 				</td>
-
 			</tr>
 			<tr>
-				<td colspan="13" bgcolor="D6D7D6" height="1"></td>
+				<td colspan="19" bgcolor="D6D7D6" height="1"></td>
 			</tr>	
 		</c:forEach>
 </table>
-
-
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
 	<tr>
 		<td align="center">

@@ -16,9 +16,7 @@
 		<result property="regDate" 				column="reg_date" 					jdbcType="DATE" />
 		<result property="proTranCode" 				column="tran_status_code" 					jdbcType="VARCHAR" />
 		<result property="viewCount" 		column="view_count" 			jdbcType="NUMERIC" />
-		<result property="cart" 		column="cart" 			jdbcType="NUMERIC" />
 		<result property="amount" 		column="amount" 			jdbcType="NUMERIC" />
-		
 	</resultMap>
 
 	<insert id="addProduct" parameterType="product">
@@ -63,15 +61,6 @@
 														<when test="searchCondition == 2 and searchKeyword != '' ">
 															AND pro.price = #{searchKeyword}
 														</when>
-														<when test="searchCondition == 3">	
-															AND tran.tran_status_code = 2
-														</when>
-														<when test="searchCondition == 4">
-															AND tran.tran_status_code = 1
-														</when>
-														<when test="searchCondition == 5">
-															AND tran.tran_status_code = 3
-														</when>
 													</choose>
 												</if>
 													<choose>
@@ -89,7 +78,7 @@
 											<if test="orderCondition != null and orderCondition != ''">
 												<choose>
 													<when test="orderCondition == 1">
-														ORDER BY reg_date DESC
+														ORDER BY pro.reg_date DESC
 													</when>
 													<when test="orderCondition == 2">
 														ORDER BY pro.price
@@ -122,19 +111,7 @@
 														<when test="searchCondition == 2 and searchKeyword != '' ">
 															AND pro.price = #{searchKeyword}
 														</when>
-														<when test="searchCondition == 3">	
-															AND tran.tran_status_code = 2
-														</when>
-														<when test="searchCondition == 4">
-															AND tran.tran_status_code = 1
-														</when>
-														<when test="searchCondition == 5">
-															AND tran.tran_status_code = 3
-														</when>
 													</choose>
-												</if>
-												<if test="cart">
-													AND cart = 1
 												</if>
 													<choose>
 														<when test="searchMin != '' and searchMax != '' and searchMin != null and searchMax != null">
@@ -151,7 +128,7 @@
 											<if test="orderCondition != null and orderCondition != ''">
 												<choose>
 													<when test="orderCondition == 1">
-														ORDER BY reg_date DESC
+														ORDER BY pro.reg_date DESC
 													</when>
 													<when test="orderCondition == 2">
 														ORDER BY pro.price

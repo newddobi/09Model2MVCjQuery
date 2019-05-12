@@ -59,10 +59,15 @@
 	<select id="getPurchaseList" parameterType="map" resultMap="purchaseSelectMap">
 		SELECT *
 	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
-	  					FROM		(	SELECT pro.prod_name, tran.tran_no, tran.buyer_id, tran.prod_no, tran.receiver_name, tran.tran_status_code 
-										FROM product pro, transaction tran 
-										WHERE pro.prod_no = tran.prod_no AND tran.buyer_id = #{buyerId} 
-										ORDER BY prod_no ) inner_table
+	  			FROM ( SELECT t.tran_no, t.prod_no, p.prod_name, t.buyer_id, t.payment_option, t.tran_status_code, t.order_date, t.tran_amount
+										FROM transaction t, product p
+										<where>
+											t.prod_no = p.prod_no
+											<if test="buyerId != 'admin'">
+												AND buyer_id = #{buyerId}
+											</if>  										
+										</where>
+										ORDER BY order_date DESC) inner_table
 						WHERE ROWNUM &lt;= #{endRowNum} )
 		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
 	</select>
@@ -91,12 +96,16 @@
 		WHERE tran_no = #{tranNo}
 	</delete>
 	
-	<select id="getTotalCount" parameterType="string" resultType="int">
+	<select id="getTotalCount" parameterType="String" resultType="int">
 		SELECT COUNT(*)
-		FROM (	SELECT pro.prod_name, tran.tran_no, tran.buyer_id, tran.prod_no, tran.receiver_name, tran.tran_status_code 
-										FROM product pro, transaction tran 
-										WHERE pro.prod_no = tran.prod_no AND tran.buyer_id = #{value} 
-										ORDER BY prod_no ) countTalble
+		FROM (	SELECT t.tran_no, t.prod_no, p.prod_name, t.buyer_id, t.payment_option, t.tran_status_code, t.order_date, t.tran_amount
+				FROM transaction t, product p
+				<where>
+					t.prod_no = p.prod_no
+					<if test="_parameter != 'admin'">
+						AND buyer_id = #{something}
+					</if>  										
+				</where>) countTalble
 	</select>
  
 </mapper>

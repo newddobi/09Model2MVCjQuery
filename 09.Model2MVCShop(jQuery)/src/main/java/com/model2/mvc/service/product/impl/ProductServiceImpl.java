@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.Review;
 import com.model2.mvc.service.product.ProductDao;
 import com.model2.mvc.service.product.ProductService;
 
@@ -25,7 +26,6 @@ public class ProductServiceImpl implements ProductService{
 	}
 	
 	public ProductServiceImpl() {
-		System.out.println("test");
 		System.out.println(this.getClass());
 	}
 
@@ -81,6 +81,10 @@ public class ProductServiceImpl implements ProductService{
 		map.put("totalCount", new Integer(totalCount));
 		
 		return map;
+	}
+	@Override
+	public void addReview(Review review) throws Exception {
+		productDao.addReview(review);
 	}
 
 }

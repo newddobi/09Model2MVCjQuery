@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.Review;
 import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 
@@ -251,7 +252,7 @@ public class ProductController {
 		}
 		
 		@RequestMapping("addZzim")
-		public ModelAndView addCart(@RequestParam("prodNo") int prodNo,
+		public ModelAndView addZzim(@RequestParam("prodNo") int prodNo,
 																	@RequestParam("userId") String userId) throws Exception{
 			
 			System.out.println("addZzim");
@@ -269,6 +270,34 @@ public class ProductController {
 			
 			return modelAndView;
 		}
+		
+		@RequestMapping("addReviewView")
+		public ModelAndView addReviewView(@RequestParam("prodNo") int prodNo,
+													@RequestParam("userId") String userId) throws Exception{
+			
+			System.out.println("addReviewView");
+			
+			Product product = productService.getProduct(prodNo);
+			ModelAndView modelAndView = new ModelAndView();
+			modelAndView.addObject("product", product);
+			modelAndView.addObject("userId", userId);
+			modelAndView.setViewName("forward:/product/addReviewView.jsp");
+			
+			return modelAndView;
+		}
+		
+		@RequestMapping("addReview")
+		public ModelAndView addReview(@ModelAttribute("review")	Review review) throws Exception{
+			
+			System.out.println("addReview");
+			
+			productService.addReview(review);
+			
+			ModelAndView modelAndView = new ModelAndView();
+			modelAndView.setViewName("forward:/review/getReview.jsp");
+			return modelAndView;
+		}
+
 		
 
 }//end of class

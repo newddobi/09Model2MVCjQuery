@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.Review;
 import com.model2.mvc.service.product.ProductDao;
 
 @Repository("productDaoImpl")
@@ -78,5 +79,9 @@ public class ProductDaoImpl implements ProductDao{
 	public int getTotalCount2(Search search) throws Exception {
 		return sqlSession.selectOne("ProductMapper.getTotalCount2", search);
 	}
-	
+
+	@Override
+	public void addReview(Review review) throws Exception {
+		sqlSession.insert("ReviewMapper.addReview", review);
+	}
 }

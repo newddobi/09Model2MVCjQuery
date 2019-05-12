@@ -111,11 +111,6 @@
 				<option value="0" ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>상품번호</option>
 				<option value="1" ${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>상품명</option>
 				<option value="2" ${ ! empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>상품가격</option>
-				<c:if test="${user.userId eq 'admin' && param.menu eq 'manage'}">
-					<option value="3" ${ ! empty search.searchCondition && search.searchCondition==3 ? "selected" : "" }>배송중</option>
-					<option value="4" ${ ! empty search.searchCondition && search.searchCondition==4 ? "selected" : "" }>배송완료</option>
-					<option value="5" ${ ! empty search.searchCondition && search.searchCondition==5 ? "selected" : "" }>구매완료</option>
-				</c:if>
 			</select>
 			<input type="text" name="searchKeyword" value="${! empty search.searchCondition ? search.searchKeyword : "" }" class="ct_input_g" style="width:200px; height:19px" />
 		</td>	
