@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="ReviewMapper">
+
+	<resultMap type="review" id="reviewSelectMap">
+		<result property="reviewNo" 		column="review_no" 			jdbcType="NUMERIC" />
+		<result property="prodNo" 		column="prod_no" 			jdbcType="NUMERIC" />
+		<result property="prodName" 		column="prod_name" 			jdbcType="VARCHAR" />
+		<result property="userId" 		column="user_id" 			jdbcType="VARCHAR" />
+		<result property="title" 		column="title" 			jdbcType="VARCHAR" />
+		<result property="content" 		column="content" 			jdbcType="VARCHAR" />
+		<result property="reviewDate" 		column="reg_date" 			jdbcType="DATE" />
+	</resultMap>
+	
+	<insert id="addReview" parameterType="review">
+		INSERT
+		INTO review ( review_no, prod_no, user_id, title, content, reg_date)
+		VALUES(seq_review_review_no.NEXTVAL, #{prodNo}, #{userId}, #{title}, #{content}, SYSDATE)
+	</insert>
+ 
+</mapper>
